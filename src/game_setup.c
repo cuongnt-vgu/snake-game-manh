@@ -253,7 +253,6 @@ enum board_init_status decompress_board_str(int** cells_p, size_t* width_p, size
     }
     return INIT_SUCCESS;
 }
-
 /** Takes in a string `compressed` and initializes values pointed to by
  * cells_p, width_p, and height_p accordingly. Arguments:
  *      - cells_p: a pointer to the pointer representing the cells array
