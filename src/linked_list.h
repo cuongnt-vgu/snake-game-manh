@@ -10,6 +10,9 @@ typedef struct node {
     struct node* next;
     struct node* prev;
 } node_t;
+typedef struct {
+    node_t* head;
+} linked_list_t;
 
 // function declarations
 int length_list(node_t* head_list);

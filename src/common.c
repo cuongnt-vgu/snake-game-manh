@@ -4,6 +4,7 @@
 
 // TODO: define global variables needed for your snake! (part 1A)
 
+
 // Definition of global variables for game status.
 int g_game_over;
 int g_score;
@@ -17,6 +18,11 @@ void set_seed(unsigned seed) {
     srand(seed);
     /* DO NOT MODIFY THIS FUNCTION */
 }
+// void initialize_snake(size_t start_x, size_t start_y, enum input_key start_direction) {
+//     g_snake.head_x = start_x;
+//     g_snake.head_y = start_y;
+//     g_snake.direction = start_direction;
+// }
 
 /** Returns a random index in [0, size)
  * Arguments:

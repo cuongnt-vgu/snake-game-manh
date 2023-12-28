@@ -40,8 +40,9 @@ enum input_key get_input() {
  */
 void end_game(int* cells, size_t width, size_t height, snake_t* snake_p) {
     // Game over!
-
+   
     // Free any memory we've taken
+    free(cells);
     teardown(cells, snake_p);
 
     // ****************** UNCOMMENT THIS CODE IN PART 2B ***********************
@@ -126,8 +127,28 @@ int main(int argc, char** argv) {
         "student!     \\  /  \n"
         "   __________/ /    \n"
         "-=:___________/\n");
+    
 
-    // initialize_window(width, height);
-    // TODO: implement the game loop here (Part 1A)!
-    // end_game(cells, width, height, &snake);
+initialize_window(width, height);
+// TODO: implement the game loop here (Part 1A)!
+        // Game loop
+
+    while (!g_game_over) {
+
+        enum input_key input = get_input();
+
+
+        // Update game state
+        update(cells, width, height, &snake, input, 1);
+
+        // Render the new game state to the screen
+        render_game(cells, width, height);
+        // Wait for some time
+        usleep(100000);  // 100 milliseconds (adjust as needed)
+    }
+
+    // Game over, clean up and exit
+    end_game(cells, width, height, &snake);
+    return 0;
 }
+

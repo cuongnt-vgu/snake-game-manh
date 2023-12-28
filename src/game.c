@@ -27,9 +27,78 @@ void update(int* cells, size_t width, size_t height, snake_t* snake_p,
     // to the new position. If the snake eats food, the game score (`g_score`)
     // increases by 1. This function assumes that the board is surrounded by
     // walls, so it does not handle the case where a snake runs off the board.
-
+    
     // TODO: implement!
+    if (g_game_over) {
+        return;
+    }
+
+    // Update the snake's position (shift one cell to the right)
+    // Note: We are currently not handling user input (INPUT_NONE)
+
+    // Loop through the cells to find the snake's head
+    for (size_t i = 0; i < width * height; ++i) {
+        if (cells[i] & FLAG_SNAKE) {
+            // Clear the current snake cell
+            cells[i] &= ~FLAG_SNAKE;
+            cells[i] |= FLAG_PLAIN_CELL;
+            // Calculate the new position
+            size_t new_position;
+            static enum input_key last_input = INPUT_RIGHT;
+            if (input == INPUT_NONE) {
+                input = last_input;
+            } else {
+                last_input = input;
+            }
+
+            // Update snake position based on user input
+            switch (input) {
+                case INPUT_UP:
+                    new_position = (i + height * width - width) % (height * width);
+                    break;
+                case INPUT_DOWN:
+                    new_position = (i + width) % (height * width);
+                    break;
+                case INPUT_LEFT:
+                    new_position = i - 1;
+                    break;
+                case INPUT_RIGHT:
+                    new_position = i + 1;
+                    break;
+                default:
+                    // No user input (INPUT_NONE), move one cell to the right
+                    new_position =i;
+                    break;
+            }
+            // Check if the new position is a wall
+            if (cells[new_position] & FLAG_WALL) {
+                // Collision with wall, end the game
+                cells[new_position-1] = FLAG_SNAKE;
+                g_game_over = 1;
+                
+                return;
+            }
+            // The snake eats the food
+            if (cells[new_position] & FLAG_FOOD) {
+               
+                // Update the game's score
+                g_score += 1;
+
+                // Place new food on the board
+                place_food(cells, width, height);
+            }
+            // Update the new snake position
+            cells[new_position] = FLAG_SNAKE;
+
+            
+            // Break the loop (assuming there's only one snake cell)
+            break;
+
+        
+        }
+    }
 }
+
 
 /** Sets a random space on the given board to food.
  * Arguments:
