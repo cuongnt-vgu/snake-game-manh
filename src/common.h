@@ -48,6 +48,7 @@ typedef struct snake {
     size_t head_x;
     size_t head_y;
     int growing;
+    size_t new_position;
     linked_list_t* positions;
 } snake_t;
 

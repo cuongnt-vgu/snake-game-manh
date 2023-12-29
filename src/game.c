@@ -43,7 +43,7 @@ void update(int* cells, size_t width, size_t height, snake_t* snake_p,
             cells[i] &= ~FLAG_SNAKE;
             cells[i] |= FLAG_PLAIN_CELL;
             // Calculate the new position
-            size_t new_position;
+
             static enum input_key last_input = INPUT_RIGHT;
             if (input == INPUT_NONE) {
                 input = last_input;
@@ -54,32 +54,51 @@ void update(int* cells, size_t width, size_t height, snake_t* snake_p,
             // Update snake position based on user input
             switch (input) {
                 case INPUT_UP:
-                    new_position = (i + height * width - width) % (height * width);
+                    snake_p->new_position = (i + height * width - width) % (height * width);
                     break;
                 case INPUT_DOWN:
-                    new_position = (i + width) % (height * width);
+                    snake_p->new_position = (i + width) % (height * width);
                     break;
                 case INPUT_LEFT:
-                    new_position = i - 1;
+                    snake_p->new_position = i - 1;
                     break;
                 case INPUT_RIGHT:
-                    new_position = i + 1;
+                    snake_p->new_position = i + 1;
                     break;
                 default:
-                    // No user input (INPUT_NONE), move one cell to the right
-                    new_position =i;
-                    break;
-            }
+                    // No user input (INPUT_NONE), move one cell in the direction of the last input
+                    switch (last_input) {
+                        case INPUT_UP:
+                            snake_p->new_position = (i + height * width - width) % (height * width);
+                            break;
+                        case INPUT_DOWN:
+                            snake_p->new_position = (i + width) % (height * width);
+                            break;
+                        case INPUT_LEFT:
+                            snake_p->new_position = i - 1;
+                            break;
+                        case INPUT_RIGHT:
+                            snake_p->new_position = i + 1;
+                            break;
+                        default:
+                            // Unexpected case, handle as needed
+                            break;
+                    }
+                break;
+            }       
+
+            
             // Check if the new position is a wall
-            if (cells[new_position] & FLAG_WALL) {
+            if (cells[snake_p->new_position] & FLAG_WALL) {
                 // Collision with wall, end the game
-                cells[new_position-1] = FLAG_SNAKE;
+                cells[snake_p->new_position-1] = FLAG_SNAKE;
+
                 g_game_over = 1;
                 
                 return;
             }
             // The snake eats the food
-            if (cells[new_position] & FLAG_FOOD) {
+            if (cells[snake_p->new_position] & FLAG_FOOD) {
                
                 // Update the game's score
                 g_score += 1;
@@ -88,7 +107,7 @@ void update(int* cells, size_t width, size_t height, snake_t* snake_p,
                 place_food(cells, width, height);
             }
             // Update the new snake position
-            cells[new_position] = FLAG_SNAKE;
+            cells[snake_p->new_position] = FLAG_SNAKE;
 
             
             // Break the loop (assuming there's only one snake cell)
