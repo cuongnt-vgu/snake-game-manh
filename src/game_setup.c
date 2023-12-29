@@ -125,7 +125,7 @@ enum board_init_status handle_error(enum board_init_status error_status, int** c
     *height_p = 0;
     return error_status;
 }
-char key_input[] = "RRDLL";
+
 // Main function to decompress the board string
 enum board_init_status decompress_board_str(int** cells_p, size_t* width_p, size_t* height_p, snake_t* snake_p, char* compressed) {
     
@@ -220,37 +220,7 @@ enum board_init_status decompress_board_str(int** cells_p, size_t* width_p, size
         return handle_error(INIT_ERR_WRONG_SNAKE_NUM, cells_p, width_p, height_p);
     }
 
-    if (snake_p != NULL && key_input != NULL) {
-        for (const char* key = key_input; *key != '\0'; ++key) {
-            // Process each key input (you may need to update this logic based on your game's input handling)
-            switch (*key) {
-                case 'U':
-                    // Handle UP input
-                    // Example: move_snake_up(snake_p);
-                    --(snake_p->head_x);
-                    break;
-                case 'D':
-                    // Handle DOWN input
-                    // Example: move_snake_down(snake_p);
-                     ++(snake_p->head_x);
-                    break;
-                case 'L':
-                    // Handle LEFT input
-                    // Example: move_snake_left(snake_p);
-                    --(snake_p->head_y);
-                    break;
-                case 'R':
-                    // Handle RIGHT input
-                    // Example: move_snake_right(snake_p);
-                    ++(snake_p->head_y);
-                    break;
-                default:
-                    // Handle other input or ignore
-                    ++(snake_p->head_y);
-                    break;
-            }
-        }
-    }
+    
     return INIT_SUCCESS;
 }
 
